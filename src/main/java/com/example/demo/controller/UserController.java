@@ -153,11 +153,11 @@ class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    ResponseEntity<Object> deleteUser(@PathVariable Long id) throws Exception {
+    ResponseEntity<Object> deleteUser(@PathVariable UUID id) throws Exception {
         try {
             userRepository.deleteById(id);
             Map<String, Object> response = new HashMap<>();
-            response.put("mensaje", String.format("usuario %d eliminado correctamente", id));
+            response.put("mensaje", String.format("usuario %s eliminado correctamente", id));
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();

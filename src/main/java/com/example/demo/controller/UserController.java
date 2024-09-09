@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.interceptor.LoggingInterceptor;
 import com.example.demo.model.User;
+import com.example.demo.repository.PhoneRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/v1")
 class UserController {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final PhoneRepository phoneRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    UserController(UserRepository repository) {
-        this.repository = repository;
+    UserController(UserRepository userRepository, PhoneRepository phoneRepository) {
+        this.userRepository = userRepository;
+        this.phoneRepository = phoneRepository;
     }
 
     // Aggregate root
@@ -32,7 +35,7 @@ class UserController {
     @GetMapping("/users")
     ResponseEntity<Object> all() {
         try {
-            List<User> all = repository.findAll();
+            List<User> all = userRepository.findAll();
             Map<String, Object> response = new HashMap<>();
             response.put("mensaje", all);
             return ResponseEntity.ok(response);
@@ -50,12 +53,21 @@ class UserController {
     ResponseEntity<Object> newUser(@Valid @RequestBody User newUser) {
         try {
             logger.info(String.format("request: %s", newUser.toString()));
-            User responseUser = repository.save(newUser);
-            logger.info(String.format("saved user: %s", responseUser));
-            Map<String, Object> response = new HashMap<>();
-            response.put("mensaje", responseUser);
-            logger.info(String.format("response: %s", response));
-            return ResponseEntity.ok(response);
+            Optional<User> byEmail = userRepository.findByEmail(newUser.getEmail());
+            if (byEmail.isPresent()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("mensaje", "El correo ya está registrado");
+                logger.info(String.format("response: %s", response));
+                return ResponseEntity.ok(response);
+            } else {
+                newUser.getPhones().forEach(phoneRepository::save);
+                User responseUser = userRepository.save(newUser);
+                logger.info(String.format("saved user: %s", responseUser));
+                Map<String, Object> response = new HashMap<>();
+                response.put("mensaje", responseUser);
+                logger.info(String.format("response: %s", response));
+                return ResponseEntity.ok(response);
+            }
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("mensaje", e.getMessage());
@@ -68,7 +80,7 @@ class UserController {
     @GetMapping("/users/{id}")
     ResponseEntity<Object> one(@PathVariable Long id) {
         try {
-            Optional<User> byId = repository.findById(id);
+            Optional<User> byId = userRepository.findById(id);
             if (byId.isPresent()) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", byId.get());
@@ -87,18 +99,18 @@ class UserController {
     @PutMapping("/users/{id}")
     ResponseEntity<Object> replaceUser(@Valid @RequestBody User newUser, @PathVariable Long id) {
         try {
-            Optional<User> byId = repository.findById(id);
+            Optional<User> byId = userRepository.findById(id);
             if (byId.isPresent()) {
                 byId.map(user -> {
 //                    user.setName(newUser.getName());
 //                    user.setEmail(newUser.getEmail());
-                    User save = repository.save(user);
+                    User save = userRepository.save(user);
                     Map<String, Object> response = new HashMap<>();
                     response.put("mensaje", save);
                     return ResponseEntity.ok(response);
                 });
             } else {
-                User save = repository.save(newUser);
+                User save = userRepository.save(newUser);
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", save);
                 return ResponseEntity.ok(response);
@@ -114,7 +126,7 @@ class UserController {
     @DeleteMapping("/users/{id}")
     ResponseEntity<Object> deleteUser(@PathVariable Long id) throws Exception {
         try {
-            repository.deleteById(id);
+            userRepository.deleteById(id);
             Map<String, Object> response = new HashMap<>();
             response.put("mensaje", String.format("usuario %d eliminado correctamente", id));
             return ResponseEntity.ok(response);

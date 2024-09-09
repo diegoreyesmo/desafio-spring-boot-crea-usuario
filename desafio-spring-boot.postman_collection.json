@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "aec375e1-e6bb-452c-a76c-7d5209ac05c1",
+		"name": "desafio-spring-boot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3093807"
+	},
+	"item": [
+		{
+			"name": "users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{hostname}}:8080/api/v1/users",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "_csrf",
+						"value": "wQHj0WppemZ9m5VetDMzMsEMKAfaIPdKPl4bUZg1miktz8bf8jLTt1MLTlBQqqU61x4HUKI_BT_oE8BnCGp4Zf0MrktJ_v-6",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Diego Reyes\",\n    \"email\": \"email@correo.cl\",\n    \"password\": \"diego3214\",\n    \"phones\": [\n        {\n            \"number\": \"1234567\",\n            \"citycode\": \"1\",\n            \"countrycode\": \"57\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname}}:8080/api/v1/users",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "_csrf",
+						"value": "wQHj0WppemZ9m5VetDMzMsEMKAfaIPdKPl4bUZg1miktz8bf8jLTt1MLTlBQqqU61x4HUKI_BT_oE8BnCGp4Zf0MrktJ_v-6",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Diego Reyes Molina\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname}}:8080/api/v1/users/a199b36b-24d5-4d91-9735-7296a20ce3e2",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"a199b36b-24d5-4d91-9735-7296a20ce3e2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "_csrf",
+						"value": "wQHj0WppemZ9m5VetDMzMsEMKAfaIPdKPl4bUZg1miktz8bf8jLTt1MLTlBQqqU61x4HUKI_BT_oE8BnCGp4Zf0MrktJ_v-6",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Diego Reyes Molina\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostname}}:8080/api/v1/users/a199b36b-24d5-4d91-9735-7296a20ce3e2",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"a199b36b-24d5-4d91-9735-7296a20ce3e2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

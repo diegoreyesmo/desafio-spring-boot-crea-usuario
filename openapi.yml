@@ -1,0 +1,134 @@
+openapi: 3.0.0
+info:
+  title: API para desafío en spring boot
+  description: Es un CRUD para gestionar usuarios
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor local
+
+paths:
+  /users:
+    get:
+      summary: Obtiene todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Crea un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    get:
+      summary: Obtener usuario por su Id
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: Id del usuario a buscar
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+
+    put:
+      summary: Actualiza un usuario existente
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: Id del usuario a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado correectamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Borra un usuario por su ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: Id del usuario a borrar
+      responses:
+        '204':
+          description: Usuario borrado correctamente
+        '404':
+          description: Usuario no encontrado
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador único del usuario
+        name:
+          type: string
+          example: Juan Rodriguez
+        email:
+          type: string
+          format: email
+          example: juan@rodriguez.org
+        password:
+          type: string
+          format: password
+          example: hunter2
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone'
+    Phone:
+      type: object
+      properties:
+        number:
+          type: string
+          example: "1234567"
+        citycode:
+          type: string
+          example: "1"
+        countrycode:
+          type: string
+          example: "57"

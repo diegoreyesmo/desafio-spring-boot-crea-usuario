@@ -57,7 +57,7 @@ class UserController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", "El correo ya está registrado");
                 logger.info(String.format("response: %s", response));
-                return ResponseEntity.ok(response);
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
             } else {
                 newUser.getPhones().forEach(phoneRepository::save);
                 newUser.setCreated(Instant.now());
@@ -69,7 +69,7 @@ class UserController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("mensaje", responseUser);
                 logger.info(String.format("response: %s", response));
-                return ResponseEntity.ok(response);
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
             }
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -158,7 +158,7 @@ class UserController {
             userRepository.deleteById(id);
             Map<String, Object> response = new HashMap<>();
             response.put("mensaje", String.format("usuario %d eliminado correctamente", id));
-            return ResponseEntity.ok(response);
+            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("mensaje", e.getMessage());

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,11 @@ public class User {
     private String password;
     @OneToMany
     private List<Phone> phones;
+    private Instant created;
+    private Instant modified;
+    private Instant last_login;
+    private UUID token;
+    private Boolean isactive;
 
     public UUID getId() {
         return id;
@@ -66,22 +72,60 @@ public class User {
         this.phones = phones;
     }
 
-    public User() {
+    public Instant getCreated() {
+        return created;
     }
 
-    public User(UUID id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public void setCreated(Instant created) {
+        this.created = created;
     }
 
-    public User(UUID id, String name, String email, String password, List<Phone> phones) {
+    public Instant getModified() {
+        return modified;
+    }
+
+    public void setModified(Instant modified) {
+        this.modified = modified;
+    }
+
+    public Instant getLast_login() {
+        return last_login;
+    }
+
+    public void setLast_login(Instant last_login) {
+        this.last_login = last_login;
+    }
+
+    public Boolean getIsactive() {
+        return isactive;
+    }
+
+    public void setIsactive(Boolean isactive) {
+        this.isactive = isactive;
+    }
+
+    public UUID getToken() {
+        return token;
+    }
+
+    public void setToken(UUID token) {
+        this.token = token;
+    }
+
+    public User(UUID id, String name, String email, String password, List<Phone> phones, Instant created, Instant modified, Instant last_login, UUID token, Boolean isactive) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phones = phones;
+        this.created = created;
+        this.modified = modified;
+        this.last_login = last_login;
+        this.token = token;
+        this.isactive = isactive;
+    }
+
+    public User() {
     }
 
     @Override
@@ -91,6 +135,12 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", phones=" + phones +
+                ", created=" + created +
+                ", modified=" + modified +
+                ", last_login=" + last_login +
+                ", token=" + token +
+                ", isactive=" + isactive +
                 '}';
     }
 }

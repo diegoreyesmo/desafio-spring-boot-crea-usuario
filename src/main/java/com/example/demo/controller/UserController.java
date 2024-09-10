@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -34,6 +36,23 @@ class UserController {
         }
     }
 
+    @GetMapping("/users/{id}")
+    ResponseEntity<Object> one(@PathVariable UUID id) {
+        try {
+            Optional<User> byId = userService.findOne(id);
+            if (byId.isPresent()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("mensaje", byId.get());
+                return ResponseEntity.ok(response);
+            } else {
+                throw new UserNotFoundException(id);
+            }
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("mensaje", e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping(value = "/users", consumes = "application/json")
     ResponseEntity<Object> newUser(@Valid @RequestBody User newUser) {
@@ -45,20 +64,6 @@ class UserController {
             errorResponse.put("mensaje", e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
-    }
-
-    // Single item
-
-    @GetMapping("/users/{id}")
-    ResponseEntity<Object> one(@PathVariable UUID id) {
-        try {
-            return userService.findOne(id);
-        } catch (Exception e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("mensaje", e.getMessage());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-
     }
 
     @PutMapping("/users/{id}")

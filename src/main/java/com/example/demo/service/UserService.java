@@ -1,11 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.PhoneRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.util.UuidGenerator;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -56,15 +54,9 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<Object> findOne(UUID id) {
-        Optional<User> byId = userRepository.findById(id);
-        if (byId.isPresent()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("mensaje", byId.get());
-            return ResponseEntity.ok(response);
-        } else {
-            throw new UserNotFoundException(id);
-        }
+    public Optional<User> findOne(UUID id) {
+        return userRepository.findById(id);
+
     }
 
     public ResponseEntity<Object> replaceUser(User newUser, UUID id) {

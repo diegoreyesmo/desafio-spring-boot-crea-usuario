@@ -10,7 +10,7 @@ luego ejecutar un contenedor a partir de la imagen anterior:
 
 Para probar los servicios puede utilizar el `postman_collection` adjunto.
 
-# Instrucciones para compilar y ejecutar la app directo desde una host (sin docker):
+# Instrucciones para compilar y ejecutar la app directamente (sin docker):
 
 requisitos: tener Java 17 y Gradle 8.2 instalados en la máquina.
 
